@@ -182,6 +182,8 @@ function build(runtime, version, abi) {
       env: process.env,
     }
 
+    console.log('Running On: ' + process.platform + ' ' + arch);
+
     // If on Windows add shell: true
     if (process.platform === 'win32') {
       spawnArgs.shell = true;
