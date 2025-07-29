@@ -178,9 +178,16 @@ function build(runtime, version, abi) {
       process.env.gyp_iohook_arch = arch;
     }
 
-    let proc = spawn(gypJsPath, args, {
+    spawnArgs = {
       env: process.env,
-    });
+    }
+
+    // If on Windows add shell: true
+    if (process.platform === 'win32') {
+      spawnArgs.shell = true;
+    }
+
+    let proc = spawn(gypJsPath, args, spawnArgs);
     proc.stdout.pipe(process.stdout);
     proc.stderr.pipe(process.stderr);
     proc.on('exit', function (code, sig) {
