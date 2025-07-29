@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   release:
   push:
+    branches: [master]
   pull_request:
     branches: [master]
 
@@ -32,7 +33,16 @@ jobs:
       - name: Setup Linux Dependencies
         if: startsWith(matrix.os, 'ubuntu')
         run: |
+          sudo apt-get update
           sudo apt-get install -y software-properties-common libx11-dev libxtst-dev libxt-dev libx11-xcb-dev libxkbcommon-dev libxkbcommon-x11-dev xorg-dev libxcb-xkb-dev libxkbfile-dev libxinerama-dev
+
+      - name: Install Visual Studio Build Tools (Windows)
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          # Install Visual Studio 2019 Build Tools with the Desktop development with C++ workload
+          # This is required for node-gyp to compile native modules on Windows.
+          # We use 2019 as specified by --msvs_version=2019 in your build commands.
+          choco install visualstudio2019-workload-vctools --no-progress -y
 
       - name: Install Packages
         run: npm i --ignore-scripts
